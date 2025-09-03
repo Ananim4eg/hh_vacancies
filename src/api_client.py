@@ -7,11 +7,8 @@ from src.base_classes import ApiHH
 
 class HeadHunterAPI(ApiHH):
 
-    def __init__(self):
-        ...
 
-
-    def __connect_to_api(self):
+    def _connect_to_api(self) -> bool:
         """Проверяет доступность api сервиса"""
 
         url = "https://api.hh.ru/vacancies"
@@ -25,20 +22,21 @@ class HeadHunterAPI(ApiHH):
             return False
 
 
-
-    def get_vacancies(self, name_vacancy: str = True, host: str = "hh.ru", pages: int = 0):
+    def get_vacancies(self, name_vacancy: str = True, *, host: str = "hh.ru", pages: int = 0) -> str|list[dict]:
         """Получает список вакансий по заданному имени"""
 
-        if not self.__connect_to_api():
+        if not self._connect_to_api():
             return "Ошибка при подключении к сервису"
 
         page = pages
         result = []
-        while page < 20:
-            date_today = datetime.today()
-            date = date_today.strftime("%Y-%m-%d")
 
-            url = "https://api.hh.ru/vacancies"
+        date_today = datetime.today()
+        date = date_today.strftime("%Y-%m-%d")
+
+        url = "https://api.hh.ru/vacancies"
+
+        while page < 20:
 
             params = {
                 "text": f'!"{name_vacancy}"',
@@ -62,6 +60,6 @@ class HeadHunterAPI(ApiHH):
         if not result:
             return "Подходящих вакансий не найдено"
 
-        unique_vacancies = {vacancy['id']: vacancy for vacancy in result}.values()
+        unique_vacancies = list({vacancy['id']: vacancy for vacancy in result}.values())
 
         return unique_vacancies
