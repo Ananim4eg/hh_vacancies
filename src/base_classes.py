@@ -19,17 +19,15 @@ class AbsVacancyIO(ABC):
 
     @property
     @abstractmethod
-    def file_worker(self):
+    def file_reader(self):
         ...
 
 
-    @file_worker.setter
     @abstractmethod
-    def file_worker(self, vacancy):
+    def add_vacancy(self, vacancy):
         ...
 
 
-    @file_worker.deleter
     @abstractmethod
-    def file_worker(self):
+    def delete_vacancy(self, vacancy):
         ...
