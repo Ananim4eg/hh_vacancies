@@ -6,7 +6,7 @@ from src.base_classes import ApiHH
 
 
 class HeadHunterAPI(ApiHH):
-
+    """Получает вакансии с API HeadHunter"""
 
     def _connect_to_api(self) -> bool:
         """Проверяет доступность api сервиса"""
@@ -60,6 +60,6 @@ class HeadHunterAPI(ApiHH):
         if not result:
             return "Подходящих вакансий не найдено"
 
-        unique_vacancies = list({vacancy['id']: vacancy for vacancy in result}.values())
+        unique_vacancies = list({vacancy['id']: vacancy for vacancy in result}.values())  # удаление дубликатов
 
         return unique_vacancies

@@ -2,7 +2,7 @@ from abc import ABC, abstractmethod
 
 
 class ApiHH(ABC):
-
+    """Базовый класс, для подключения к api HeadHunters"""
 
     @abstractmethod
     def _connect_to_api(self):
@@ -15,7 +15,7 @@ class ApiHH(ABC):
 
 
 class AbsVacancyIO(ABC):
-
+    """Базовый клас для взаимодействия с файлом, который должен хранить список вакансий"""
 
     @property
     @abstractmethod
