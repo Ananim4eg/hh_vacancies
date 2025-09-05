@@ -64,3 +64,17 @@ class Vacancy:
             return False
         else:
             return True
+
+
+    @classmethod
+    def add_new_vacancy(cls, vacancy: dict[str, Any]):
+        """Создает объект класса Vacancy"""
+
+        return cls(
+            vacancy['name'],
+            vacancy['salary'],
+            vacancy['alternate_url'],
+            vacancy['employer']['name'],
+            vacancy['snippet']['requirement']
+        )
+

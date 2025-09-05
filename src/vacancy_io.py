@@ -1,5 +1,6 @@
 import json
 import os
+from typing import Any
 
 from src.base_classes import AbsVacancyIO
 from src.vacancy import Vacancy
@@ -12,15 +13,21 @@ class VacancyJSON(AbsVacancyIO):
         self.__file_name = file_name
         self.__file_path = os.path.join(os.path.dirname(__file__), '..', 'data', file_name)
 
-        with open(self.__file_path, 'w', encoding='utf-8') as file:
-            json.dump([], file, indent=4)
-
+        try:
+            with open(self.__file_path, 'w', encoding='utf-8') as file:
+                json.dump([], file, indent=4)
+        except FileNotFoundError:
+            print('Ошибка при создании файла')
 
     @property
     def file_reader(self):
         """Получает информацию о вакансиях из файла json"""
-        with open(self.__file_path, 'r', encoding='utf-8') as file:
-            result = json.load(file)
+
+        try:
+            with open(self.__file_path, 'r', encoding='utf-8') as file:
+                result = json.load(file)
+        except FileNotFoundError:
+            return f'При чтении файла произошла ошибка. Файл по пути {self.__file_path} не найдет'
 
         return result
 
@@ -40,9 +47,11 @@ class VacancyJSON(AbsVacancyIO):
         if vacancy_info not in data:
             data.append(vacancy_info)
 
-        with open(self.__file_path, 'w', encoding='utf-8') as file:
-            json.dump(data, file, ensure_ascii=False, indent=4)
-
+        try:
+            with open(self.__file_path, 'w', encoding='utf-8') as file:
+                json.dump(data, file, ensure_ascii=False, indent=4)
+        except FileNotFoundError:
+            return f'При добавлении информации произошла ошибка. Файл по пути {self.__file_path} не найдет'
 
 
     def delete_vacancy(self, vacancy: Vacancy):
@@ -55,10 +64,13 @@ class VacancyJSON(AbsVacancyIO):
             'требования': vacancy.requirement
         }
 
-        data = self.file_reader
+        data: list[dict[str, Any]] = self.file_reader
 
         if vacancy_info in data:
             data.remove(vacancy_info)
 
-        with open(self.__file_path, 'w', encoding='utf-8') as file:
-            json.dump(data, file, ensure_ascii=False, indent=4)
+        try:
+            with open(self.__file_path, 'w', encoding='utf-8') as file:
+                json.dump(data, file, ensure_ascii=False, indent=4)
+        except FileNotFoundError:
+            return f'При удалении информации произошла ошибка. Файл по пути {self.__file_path} не найдет'
