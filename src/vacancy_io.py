@@ -20,7 +20,7 @@ class VacancyJSON(AbsVacancyIO):
             print('Ошибка при создании файла')
 
     @property
-    def file_reader(self):
+    def file_reader(self) -> Any:
         """Получает информацию о вакансиях из файла json"""
 
         try:
@@ -31,8 +31,7 @@ class VacancyJSON(AbsVacancyIO):
 
         return result
 
-
-    def add_vacancy(self, vacancy: Vacancy):
+    def add_vacancy(self, vacancy: Vacancy) -> None | str:
         """Добавляет вакансию в файл json"""
         vacancy_info = {
             'имя вакансии': vacancy.name,
@@ -53,8 +52,7 @@ class VacancyJSON(AbsVacancyIO):
         except FileNotFoundError:
             return f'При добавлении информации произошла ошибка. Файл по пути {self.__file_path} не найдет'
 
-
-    def delete_vacancy(self, vacancy: Vacancy):
+    def delete_vacancy(self, vacancy: Vacancy) -> None | str:
         """Удаляет вакансию из файла json"""
         vacancy_info = {
             'имя вакансии': vacancy.name,

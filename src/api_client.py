@@ -21,8 +21,7 @@ class HeadHunterAPI(ApiHH):
         else:
             return False
 
-
-    def get_vacancies(self, name_vacancy: str = True, *, host: str = "hh.ru", pages: int = 0) -> str|list[dict]:
+    def get_vacancies(self, name_vacancy: str, host: str = "hh.ru", pages: int = 0) -> str | list:
         """Получает список вакансий по заданному имени"""
 
         if not self._connect_to_api():

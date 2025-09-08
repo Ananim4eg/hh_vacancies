@@ -25,11 +25,13 @@ def filter_vacancies(list_vacancies: list[dict[str, Any]], key_word: str) -> lis
     for item in list_vacancies:
 
         if item['snippet']['requirement']:
-            if any(word in item['snippet']['requirement'] for word in words):  # поверка, что хотя бы 1 из ключевых слов есть в описании вакансии
+            # поверка, что хотя бы 1 из ключевых слов есть в описании вакансии
+            if any(word in item['snippet']['requirement'] for word in words):
                 preparing_vacancy = {
                     'id вакансии': item['id'],
                     'название вакансии': item['name'],
-                    'зарплата от': item['salary']['from'] if type(item['salary']) == dict else 0,  # проверка, что поля не пустые
+                    # проверка, что поля не пустые
+                    'зарплата от': item['salary']['from'] if type(item['salary']) is dict else 0,
                     'описание': item['snippet']['requirement']
                 }
                 result_list.append(preparing_vacancy)
