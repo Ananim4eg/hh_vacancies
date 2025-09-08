@@ -1,46 +1,66 @@
 from src.vacancy import Vacancy
-from src.vacancy_io import VacancyJSON
 
-vac1 = Vacancy(
-    "Тестировщик комфорта квартир",
-    {
+
+def test_vacancy_init(create_vacancy_one):
+    vacancy = create_vacancy_one
+
+    assert vacancy.name == "Тестировщик комфорта квартир"
+    assert vacancy.salary == {
       "from": 350000,
       "to": 450000,
       "currency": "RUR",
       "gross": False
-    },
-    "https://hh.ru/vacancy/93353083",
-    "Специализированный застройщик BM GROUP",
-    "Занимать активную жизненную позицию, уметь активно танцевать и громко петь. Обладать навыками коммуникации, чтобы налаживать добрососедские отношения. Обладать системным мышлением...")
-
-vac2 = Vacancy(
-    "Бортпроводник",
-    None,
-    "https://hh.ru/vacancy/93209001",
-    "«MY FREIGHTER» LLC",
-    "Образование: среднее полное (11 классов), среднее специальное, высшее. Обязательное владение узбекским, русским и английским языками. Готовность работать согласно графику полетов. ")
-
-vac3 = Vacancy(
-    "Оператор ПК, оператор базы данных",
-    {
-        "from":160000,
-        "to":None,
-        "currency":"RUR",
-        "gross":True
-    },
-    "https://hh.ru/vacancy/93166058",
-    "Рост Развитие Решение",
-    "Опыт в продажах. Опыт работы с клиентами. Умение проводить переговоры. Мобильность."
-)
+    }
+    assert vacancy.vacancy_url == "https://hh.ru/vacancy/93353083"
+    assert vacancy.employer_name == "Специализированный застройщик BM GROUP"
+    assert vacancy.requirement == (
+        "Занимать активную жизненную позицию, уметь активно танцевать и громко петь. Обладать "
+        "навыками коммуникации, чтобы налаживать добрососедские отношения. Обладать системным мышлением..."
+    )
 
 
-file_one = VacancyJSON()
+def test_vacancy_init_no_salary(create_vacancy_two):
+    vacancy = create_vacancy_two
 
-file_one.add_vacancy(vac3)
-file_one.add_vacancy(vac1)
+    assert vacancy.salary == 'Не указано'
 
-print(file_one.file_reader)
 
-file_one.delete_vacancy(vac1)
+def test_comparison_methods(create_vacancy_one, create_vacancy_two, create_vacancy_three):
+    vac1 = create_vacancy_one
+    vac2 = create_vacancy_two
+    vac3 = create_vacancy_three
 
-print(file_one.file_reader)
+    assert vac1.__lt__(vac2) == 'В одной или нескольких вакансиях не указана зарплата'
+    assert vac1.__lt__(vac3) == False
+    assert vac3.__gt__(vac1) == False
+    assert vac2.__gt__(vac1) == "В одной или нескольких вакансиях не указана зарплата"
+    assert vac3.__lt__(vac1) == True
+    assert vac1.__gt__(vac3) == True
+    assert vac1.__eq__(vac3) == False
+    assert vac2.__eq__(vac3) == "В одной или нескольких вакансиях не указана зарплата"
+
+
+def test_class_method_created_vacancy():
+    vacancy = Vacancy.add_new_vacancy(
+        {
+
+            "name": "Бортпроводник",
+            "salary": None,
+            "alternate_url": "https://hh.ru/vacancy/93209001",
+            "employer": {
+                "name": "«MY FREIGHTER» LLC",
+            },
+            "snippet": {
+                "requirement": "Образование: среднее полное (11 классов), среднее специальное, высшее. Обязательное "
+                               "владение узбекским, русским и английским языками. Готовность работать согласно"
+                               " графику полетов. ",
+            },
+        }
+    )
+
+    assert vacancy.name == "Бортпроводник"
+    assert vacancy.salary == "Не указано"
+    assert vacancy.vacancy_url == "https://hh.ru/vacancy/93209001"
+    assert vacancy.employer_name == "«MY FREIGHTER» LLC"
+    assert vacancy.requirement == "Образование: среднее полное (11 классов), среднее специальное, высшее. Обязательное\
+ владение узбекским, русским и английским языками. Готовность работать согласно графику полетов. "

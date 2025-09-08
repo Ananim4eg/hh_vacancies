@@ -1,7 +1,7 @@
-from abc import ABC, abstractmethod
+from abc import ABC, abstractmethod  # pragma: no cover
 
 
-class ApiHH(ABC):
+class ApiHH(ABC):  # pragma: no cover
     """Базовый класс, для подключения к api HeadHunters"""
 
     @abstractmethod
@@ -14,7 +14,7 @@ class ApiHH(ABC):
         ...
 
 
-class AbsVacancyIO(ABC):
+class AbsVacancyIO(ABC): # pragma: no cover
     """Базовый клас для взаимодействия с файлом, который должен хранить список вакансий"""
 
     @property

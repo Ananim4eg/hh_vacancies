@@ -58,6 +58,8 @@ def main():
             for elem in get_top_vacancies_by_salary(filter_list_vacancies,top_salary):
                 print(elem)
 
+            return 'Завершение работы'
+
 
 if __name__ == '__main__':
     main()
